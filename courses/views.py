@@ -18,17 +18,11 @@ def course_create(request: HttpRequest) -> HttpResponse:
         form = CourseForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('course_create')
-        else:
-            form = CourseForm()
+            return redirect('course_list')
+    else:
+        form = CourseForm()
 
-    return render(request, 'courses/from.html', {'form': form})
-
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpRequest, HttpResponse
-from .models import Course
-from enrollments.models import Enrollment
-
+    return render(request, 'courses/form.html', {'form': form})
 
 def course_detail(request: HttpRequest, id: int) -> HttpResponse:
     course = get_object_or_404(Course, id=id)# bu ancha qulay ekan ancha qulay qulda error yozish ham shart emas
@@ -45,5 +39,20 @@ def course_detail(request: HttpRequest, id: int) -> HttpResponse:
     )
 
 def course_delete(request: HttpRequest, id: int) -> HttpResponse:
-    return render(request, 'courses/detail.html')
+    course = get_object_or_404(Course, id=id)
 
+    enrollments = Enrollment.objects.filter(course=course)
+    if enrollments.exists():
+        error_message = "Bu kursda studentlar yozilgan. O‘chirish mumkin emas."
+        return render(
+            request,
+            'courses/detail.html',
+            {
+                'course': course,
+                'enrollments': enrollments,
+                'error': error_message,
+            }
+        )
+
+    course.delete()
+    return redirect('course_list')

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Courses{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="row">
+    <h2 style="margin:0;">Courses</h2>
+    <a class="btn btn-primary" href="{% url 'course_create' %}">+ Create course</a>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Duration (weeks)</th>
+        <th class="muted">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for course in courses %}
+      <tr>
+        <td>
+          <strong>{{ course.title }}</strong><br />
+          <span class="muted">{{ course.description|default:"" }}</span>
+        </td>
+        <td>{{ course.duration_weeks }}</td>
+        <td>
+          <a class="btn" href="{% url 'course_detail' course.id %}">Detail</a>
+          <form method="post" action="{% url 'course_delete' course.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button class="btn btn-danger" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="3" class="muted">No courses yet.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

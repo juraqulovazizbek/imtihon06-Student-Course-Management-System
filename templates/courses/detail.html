@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Course detail{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="row">
+    <div>
+      <h2 style="margin:0;">{{ course.title }}</h2>
+      <div class="muted">{{ course.description|default:"" }}</div>
+      <div style="margin-top:8px;">
+        <strong>Duration:</strong> {{ course.duration_weeks }} weeks
+      </div>
+    </div>
+
+    <form method="post" action="{% url 'course_delete' course.id %}">
+      {% csrf_token %}
+      <button class="btn btn-danger" type="submit">Delete</button>
+    </form>
+  </div>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  <h3>Enrolled students</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>Enrolled at</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in enrollments %}
+      <tr>
+        <td>{{ e.student.full_name }}</td>
+        <td class="muted">{{ e.enrolled_at }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="2" class="muted">No students enrolled yet.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div style="margin-top:12px;">
+    <a class="btn" href="{% url 'course_list' %}">Back to list</a>
+  </div>
+</div>
+{% endblock %}
