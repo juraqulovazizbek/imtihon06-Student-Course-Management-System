@@ -1,43 +1,63 @@
+<!-- templates/courses/list.html -->
 {% extends "base.html" %}
 {% block title %}Courses{% endblock %}
 
 {% block content %}
-<div class="card">
-  <div class="row">
-    <h2 style="margin:0;">Courses</h2>
-    <a class="btn btn-primary" href="{% url 'course_create' %}">+ Create course</a>
+<section class="card">
+  <div class="header">
+    <div>
+      <h1 class="h1">Courses</h1>
+      <p class="sub">Kurslar ro‘yxati: nomi, davomiyligi va studentlar soni.</p>
+    </div>
+    <div class="actions">
+      <a class="btn primary" href="/courses/create/">+ Create course</a>
+    </div>
   </div>
 
-  <table>
+  <table class="table">
     <thead>
       <tr>
         <th>Title</th>
-        <th>Duration (weeks)</th>
-        <th class="muted">Actions</th>
+        <th>Duration</th>
+        <th>Students</th>
+        <th style="width:260px;">Actions</th>
       </tr>
     </thead>
     <tbody>
       {% for course in courses %}
-      <tr>
-        <td>
-          <strong>{{ course.title }}</strong><br />
-          <span class="muted">{{ course.description|default:"" }}</span>
-        </td>
-        <td>{{ course.duration_weeks }}</td>
-        <td>
-          <a class="btn" href="{% url 'course_detail' course.id %}">Detail</a>
-          <form method="post" action="{% url 'course_delete' course.id %}" style="display:inline;">
-            {% csrf_token %}
-            <button class="btn btn-danger" type="submit">Delete</button>
-          </form>
-        </td>
-      </tr>
+        <tr>
+          <td>
+            <strong>{{ course.title }}</strong>
+            {% if course.description %}
+              <div class="help">{{ course.description|truncatechars:90 }}</div>
+            {% endif %}
+          </td>
+          <td><span class="badge">{{ course.duration_weeks }} weeks</span></td>
+          <td>
+            <span class="badge">
+                {{ course.enrollment_set.count }}
+            </span>
+          </td>
+
+          <td>
+            <div class="actions">
+              <a class="btn" href="/courses/{{ course.id }}/">Detail</a>
+              <a class="btn" href="/courses/{{ course.id }}/edit/">Edit</a>
+              <form method="post" action="/courses/{{ course.id }}/delete/" style="display:inline;">
+                {% csrf_token %}
+                <button class="btn danger" type="submit">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
       {% empty %}
-      <tr>
-        <td colspan="3" class="muted">No courses yet.</td>
-      </tr>
+        <tr><td colspan="4" class="help">Hozircha kurs yo‘q.</td></tr>
       {% endfor %}
     </tbody>
   </table>
-</div>
+
+  <div class="footer-note">
+    Delete sharti: kursga studentlar yozilgan bo‘lsa — o‘chirish mumkin emas (xabar chiqishi kerak).
+  </div>
+</section>
 {% endblock %}

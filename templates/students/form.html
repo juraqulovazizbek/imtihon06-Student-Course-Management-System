@@ -1,0 +1,49 @@
+<!-- templates/students/form.html -->
+{% extends "base.html" %}
+{% block title %}Student form{% endblock %}
+
+{% block content %}
+<section class="card">
+  <div class="header">
+    <div>
+      <h1 class="h1">Create student</h1>
+      <p class="sub">full_name, email, age (>=16) to‘ldiring.</p>
+    </div>
+    <div class="actions">
+      <a class="btn ghost" href="/students/">← Back</a>
+    </div>
+  </div>
+
+  <form method="post" class="form">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <div class="flash error">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <div class="field">
+      {{ form.full_name.label_tag }}
+      {{ form.full_name }}
+      <div class="errors">{{ form.full_name.errors }}</div>
+    </div>
+
+    <div class="field">
+      {{ form.email.label_tag }}
+      {{ form.email }}
+      <div class="errors">{{ form.email.errors }}</div>
+    </div>
+
+    <div class="field">
+      {{ form.age.label_tag }}
+      {{ form.age }}
+      <div class="errors">{{ form.age.errors }}</div>
+      <div class="help">Kamida 16.</div>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" type="submit">Save</button>
+      <a class="btn" href="/students/">Cancel</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

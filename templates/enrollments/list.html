@@ -1,0 +1,48 @@
+<!-- templates/enrollments/list.html -->
+{% extends "base.html" %}
+{% block title %}Enrollments{% endblock %}
+
+{% block content %}
+<section class="card">
+  <div class="header">
+    <div>
+      <h1 class="h1">Enrollments</h1>
+      <p class="sub">Student → Course bog‘lanishlari.</p>
+    </div>
+    <div class="actions">
+      <a class="btn primary" href="/enrollments/create/">+ Create enrollment</a>
+    </div>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>Course</th>
+        <th>Enrolled at</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in enrollments %}
+        <tr>
+          <td>
+            <a class="btn ghost" href="/students/{{ e.student.id }}/" style="padding:0;border:none;background:none;">
+              {{ e.student.full_name }}
+            </a>
+            <div class="help">{{ e.student.email }}</div>
+          </td>
+          <td>
+            <a class="btn ghost" href="/courses/{{ e.course.id }}/" style="padding:0;border:none;background:none;">
+              {{ e.course.title }}
+            </a>
+            <div class="help">{{ e.course.duration_weeks }} weeks</div>
+          </td>
+          <td><span class="badge">{{ e.enrolled_at|date:"Y-m-d H:i" }}</span></td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="3" class="help">Hozircha enrollment yo‘q.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

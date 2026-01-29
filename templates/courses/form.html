@@ -1,15 +1,50 @@
+<!-- templates/courses/form.html -->
 {% extends "base.html" %}
-{% block title %}Create course{% endblock %}
+{% block title %}Course form{% endblock %}
 
 {% block content %}
-<div class="card">
-  <h2 style="margin-top:0;">Create course</h2>
+<section class="card">
+  <div class="header">
+    <div>
+      <h1 class="h1">{% if course %}Edit course{% else %}Create course{% endif %}</h1>
+      <p class="sub">Title, description va duration_weeks ni to‘ldiring.</p>
+    </div>
+    <div class="actions">
+      <a class="btn ghost" href="/courses/">← Back</a>
+    </div>
+  </div>
 
-  <form method="post">
+  <form method="post" class="form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn btn-primary" type="submit">Save</button>
-    <a class="btn" href="{% url 'course_list' %}">Back</a>
+
+    {% if form.non_field_errors %}
+      <div class="flash error">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <div class="field">
+      {{ form.title.label_tag }}
+      {{ form.title }}
+      <div class="errors">{{ form.title.errors }}</div>
+    </div>
+
+    <div class="field">
+      {{ form.description.label_tag }}
+      {{ form.description }}
+      <div class="errors">{{ form.description.errors }}</div>
+      <div class="help">Majburiy emas.</div>
+    </div>
+
+    <div class="field">
+      {{ form.duration_weeks.label_tag }}
+      {{ form.duration_weeks }}
+      <div class="errors">{{ form.duration_weeks.errors }}</div>
+      <div class="help">0 dan katta bo‘lishi shart.</div>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" type="submit">Save</button>
+      <a class="btn" href="/courses/">Cancel</a>
+    </div>
   </form>
-</div>
+</section>
 {% endblock %}

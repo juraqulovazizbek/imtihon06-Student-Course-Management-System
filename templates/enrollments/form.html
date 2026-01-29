@@ -1,0 +1,48 @@
+<!-- templates/enrollments/form.html -->
+{% extends "base.html" %}
+{% block title %}Create enrollment{% endblock %}
+
+{% block content %}
+<section class="card">
+  <div class="header">
+    <div>
+      <h1 class="h1">Create enrollment</h1>
+      <p class="sub">Studentni kursga yozish (takror yozilsa error chiqishi kerak).</p>
+    </div>
+    <div class="actions">
+      <a class="btn ghost" href="/enrollments/">← Back</a>
+    </div>
+  </div>
+
+  <form method="post" class="form">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <div class="flash error">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <div class="field">
+      {{ form.student.label_tag }}
+      {{ form.student }}
+      <div class="errors">{{ form.student.errors }}</div>
+    </div>
+
+    <div class="field">
+      {{ form.course.label_tag }}
+      {{ form.course }}
+      <div class="errors">{{ form.course.errors }}</div>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" type="submit">Save</button>
+      <a class="btn" href="/enrollments/">Cancel</a>
+    </div>
+
+    <div class="footer-note">
+      Agar bu student avval shu kursga yozilgan bo‘lsa, shu sahifada qizil error ko‘rinishi kerak.
+    </div>
+  </form>
+</section>
+{% endblock %}
