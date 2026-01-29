@@ -18,14 +18,17 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.shortcuts import redirect
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    #local url
+    # local urls
     path('courses/', include('courses.urls')),
     path('students/', include('students.urls')),
     path('enrollments/', include('enrollments.urls')),
+
+    path('', lambda request: redirect('/courses/')),
 ]
 
 if settings.DEBUG:
