@@ -29,7 +29,7 @@ def course_create(request: HttpRequest) -> HttpResponse:
 def course_detail(request, pk):
     course = get_object_or_404(Course, pk=pk)
 
-    students = Student.objects.filter(enrollment__course=course).distinct()
+    students = Student.objects.filter(enrollments__course=course).distinct()
     enrollments = Enrollment.objects.filter(course=course).select_related('student')
     students_count = enrollments.count()
 
